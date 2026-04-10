@@ -16,12 +16,18 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class RideSerializer(serializers.ModelSerializer):
     creator = UserSerializer(read_only=True)
-    point_a = LocationSerializer(read_only=True)
-    point_b = LocationSerializer(read_only=True)
+    point_a = serializers.PrimaryKeyRelatedField(queryset = Location.objects.all())
+    point_b = serializers.PrimaryKeyRelatedField(queryset = Location.objects.all())
 
     class Meta:
         model = Ride
         fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['point_a'] = LocationSerializer(instance.point_a).data
+        representation['point_b'] = LocationSerializer(instance.point_b).data
+        return representation
 
 class RideStatsSerializer(serializers.Serializer):
     total_rides = serializers.IntegerField()
