@@ -1,0 +1,25 @@
+<div class="auth-card">
+  <div class="tabs">
+    <span [class.active]="isLoginMode" (click)="toggleMode(true)">Sign In</span>
+    <span [class.active]="!isLoginMode" (click)="toggleMode(false)">Create Account</span>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="input-group">
+      <label>Username</label>
+      <input type="text" [(ngModel)]="authData.username" name="username" placeholder="Enter your username" required>
+    </div>
+
+    <div class="input-group" *ngIf="!isLoginMode">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="authData.email" name="email" placeholder="Enter your email">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" [(ngModel)]="authData.password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <button type="submit">{{ isLoginMode ? 'Sign In' : 'Register' }}</button>
+  </form>
+</div>
