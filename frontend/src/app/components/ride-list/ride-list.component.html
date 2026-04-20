@@ -3,12 +3,12 @@
     <div class="logo">Жол · Ride</div>
     <nav class="nav-links">
       <a class="active">Все поездки</a>
-      <a>Мои поездки</a>
-      <button class="create-btn">+ Создать поездку</button>
+      <a [routerLink]="['/my-rides']" routerLinkActive="active">Мои поездки</a>
+      <button class="create-btn" (click)="toggleCreateForm()">
+        {{ showCreateForm ? '✕ Закрыть' : '+ Создать поездку' }}
+      </button>
     </nav>
-    <div class="user-profile">
-      <div class="avatar">U</div>
-    </div>
+    <button class="logout-btn" (click)="logout()">Выйти</button>
   </header>
 
   <main class="content">
@@ -17,35 +17,98 @@
       <p>Найди попутчиков и раздели стоимость такси</p>
     </div>
 
-    <div class="rides-grid" *ngIf="rides.length > 0; else emptyState">
-      <div class="ride-card" *ngFor="let ride of rides">
-        <div class="card-top">
-          <h3>{{ ride.point_a_name }} → {{ ride.point_b_name }}</h3>
-          <span class="badge status-open">ОТКРЫТО</span>
-        </div>
-        <p class="date">Сегодня, {{ ride.departure_time | date:'HH:mm' }}</p>
-        
-        <div class="card-stats">
-          <div class="stat">
-            <label>ИТОГО</label>
-            <div class="value">{{ ride.total_price }} ₸</div>
-          </div>
-          <div class="stat">
-            <label>МЕСТ</label>
-            <div class="value">{{ ride.max_seats }}</div>
-          </div>
-        </div>
-        <button class="join-btn">Присоединиться</button>
-      </div>
-    </div>
+    @if (successMessage) {
+      <div class="success-box">{{ successMessage }}</div>
+    }
 
-    <ng-template #emptyState>
+    @if (errorMessage) {
+      <div class="error-box">{{ errorMessage }}</div>
+    }
+
+    @if (showCreateForm) {
+      <div class="create-form-box">
+        <h2>Новая поездка</h2>
+
+        <div class="form-group">
+          <label>Откуда</label>
+          <select [(ngModel)]="newRide.point_a" name="point_a">
+            <option value="">-- Выберите место --</option>
+            @for (loc of locations; track loc.id) {
+              <option [value]="loc.id">{{ loc.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Куда</label>
+          <select [(ngModel)]="newRide.point_b" name="point_b">
+            <option value="">-- Выберите место --</option>
+            @for (loc of locations; track loc.id) {
+              <option [value]="loc.id">{{ loc.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Дата и время отправления</label>
+          <input type="datetime-local" [(ngModel)]="newRide.departure_time" name="departure_time" />
+        </div>
+
+        <div class="form-group">
+          <label>Стоимость (₸)</label>
+          <input type="number" [(ngModel)]="newRide.total_price" name="total_price" placeholder="Например: 2000" />
+        </div>
+
+        <div class="form-group">
+          <label>Количество мест</label>
+          <input type="number" [(ngModel)]="newRide.max_seats" name="max_seats" min="1" max="10" />
+        </div>
+
+        <div class="form-actions">
+          <button class="submit-btn" (click)="createRide()" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Создание...' : 'Создать поездку' }}
+          </button>
+          <button class="cancel-btn" (click)="toggleCreateForm()">Отмена</button>
+        </div>
+      </div>
+    }
+
+    @if (rides.length > 0) {
+      <div class="rides-grid">
+        @for (ride of rides; track ride.id) {
+          <div class="ride-card">
+            <div class="card-top">
+              <h3>{{ ride.point_a?.name }} → {{ ride.point_b?.name }}</h3>
+              <span class="badge"
+                [class.status-open]="ride.status === 'open'"
+                [class.status-full]="ride.status === 'full'">
+                {{ ride.status === 'open' ? 'ОТКРЫТО' : 'ЗАПОЛНЕНО' }}
+              </span>
+            </div>
+
+            <p class="date">{{ ride.departure_time | date:'dd.MM.yyyy, HH:mm' }}</p>
+
+            <div class="card-stats">
+              <div class="stat">
+                <label>ИТОГО</label>
+                <div class="value">{{ ride.total_price }} ₸</div>
+              </div>
+              <div class="stat">
+                <label>МЕСТ</label>
+                <div class="value">{{ ride.max_seats }}</div>
+              </div>
+            </div>
+            <button class="join-btn" (click)="joinRide(ride.id)">Присоединиться</button>
+          </div>
+        }
+      </div>
+    } @else {
       <div class="empty-box">
         <div class="icon">🚗</div>
         <h3>Поездок пока не найдено</h3>
         <p>Попробуйте войти заново или создайте свою первую поездку!</p>
         <button class="retry-btn" (click)="goToLogin()">Вернуться к авторизации</button>
       </div>
-    </ng-template>
+    }
   </main>
 </div>

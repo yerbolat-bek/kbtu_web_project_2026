@@ -14,43 +14,60 @@ import { Router } from '@angular/router';
 export class AuthComponent {
   isLoginMode = true;
 
-  authData = {username: '', email:'', password: ''};
+  authData = { username: '', email: '', password: '' };
 
-  constructor(private authService: AuthService, private router: Router){}
+  errorMessage: string = '';
+  successMessage: string = '';
+  isLoading: boolean = false;
 
-  toggleMode(mode: boolean){
+  constructor(private authService: AuthService, private router: Router) {}
+
+  toggleMode(mode: boolean) {
     this.isLoginMode = mode;
+    this.errorMessage = ''; 
+    this.successMessage = '';
   }
 
-  onSubmit(){
-    if(this.isLoginMode){
+  onSubmit() {
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.isLoading = true;
+
+    if (this.isLoginMode) {
       this.authService.login({
         username: this.authData.username,
         password: this.authData.password
       }).subscribe({
         next: (res: any) => {
           localStorage.setItem('token', res.token);
+          this.isLoading = false;
           this.router.navigate(['/rides']);
         },
-        error: (err) => alert('Invalid credentials')
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = 'Неверный логин или пароль. Попробуйте снова.';
+        }
       });
-    } else{
+
+    } else {
       if (!this.authData.email.includes('@')) {
-        alert('Введите корректный Email');
+        this.errorMessage = 'Введите корректный Email адрес';
+        this.isLoading = false;
         return;
       }
 
       this.authService.register(this.authData).subscribe({
         next: (res: any) => {
           localStorage.setItem('token', res.token);
-          alert('Аккаунт успешно создан!');
-          this.router.navigate(['/rides']); // Автоматический переход
+          this.isLoading = false;
+          this.successMessage = 'Аккаунт успешно создан!';
+          setTimeout(() => this.router.navigate(['/rides']), 1000);
         },
         error: (err: any) => {
-          const errorMsg = err.error?.error || 'Ошибка регистрации';
-          alert(errorMsg);
+          this.isLoading = false;
+          this.errorMessage = err.error?.error || 'Ошибка регистрации. Попробуйте снова.';
         }
       });
-    } 
+    }
   }
 }

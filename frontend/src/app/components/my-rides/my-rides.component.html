@@ -1,0 +1,57 @@
+<div class="main-container">
+  <header class="header">
+    <div class="logo">Жол · Ride</div>
+    <nav class="nav-links">
+      <a (click)="goToAllRides()" style="cursor:pointer;">Все поездки</a>
+      <a class="active">Мои поездки</a>
+    </nav>
+    <button class="logout-btn" (click)="logout()">Выйти</button>
+  </header>
+
+  <main class="content">
+    <div class="content-header">
+      <h1>Мои поездки</h1>
+      <p>Поездки которые вы создали</p>
+    </div>
+
+    @if (isLoading) {
+      <div class="loading">Загрузка...</div>
+    } @else if (errorMessage) {
+      <div class="error-box">{{ errorMessage }}</div>
+    } @else if (myRides.length === 0) {
+      <div class="empty-box">
+        <div class="icon">🚗</div>
+        <h3>У вас ещё нет поездок</h3>
+        <button class="retry-btn" (click)="goToAllRides()">Посмотреть все поездки</button>
+      </div>
+    } @else {
+      <div class="rides-grid">
+        @for (ride of myRides; track ride.id) {
+          <div class="ride-card">
+            <div class="card-top">
+              <h3>{{ ride.point_a?.name }} → {{ ride.point_b?.name }}</h3>
+              <span class="badge" [class.status-open]="ride.status === 'open'"
+                                  [class.status-full]="ride.status === 'full'">
+                {{ ride.status === 'open' ? 'ОТКРЫТО' : 'ЗАПОЛНЕНО' }}
+              </span>
+            </div>
+            <p class="date">{{ ride.departure_time | date:'dd.MM.yyyy, HH:mm' }}</p>
+
+            <div class="card-stats">
+              <div class="stat">
+                <label>ИТОГО</label>
+                <div class="value">{{ ride.total_price }} ₸</div>
+              </div>
+              <div class="stat">
+                <label>МЕСТ</label>
+                <div class="value">{{ ride.max_seats }}</div>
+              </div>
+            </div>
+
+            <button class="delete-btn" (click)="deleteRide(ride.id)">Удалить</button>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

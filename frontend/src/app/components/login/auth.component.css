@@ -3,56 +3,64 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f9f9f9; /* Светлый фон */
+  background-color: #f2f2f2;
 }
 
 .auth-card {
   background: white;
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Мягкая тень */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .tabs {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 30px;
+  margin-bottom: 28px;
   border-bottom: 1px solid #eee;
+  padding-bottom: 0;
 }
 
-.tab {
+.tabs span {
   padding: 10px 20px;
   cursor: pointer;
-  color: #ccc;
+  color: #aaa;
   font-weight: 500;
-  transition: 0.3s;
+  font-size: 14px;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
 }
 
-.tab.active {
+.tabs span.active {
   color: #000;
-  border-bottom: 2px solid #000; /* Черная полоска под активной вкладкой */
+  border-bottom: 2px solid #000;
 }
 
+/* Поля формы */
 .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .input-group label {
   display: block;
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #666;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #555;
+  font-weight: 500;
 }
 
 .input-group input {
   width: 100%;
-  padding: 12px;
+  padding: 11px 14px;
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
-  transition: 0.3s;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
 .input-group input:focus {
@@ -61,20 +69,51 @@
 
 .submit-btn {
   width: 100%;
-  padding: 14px;
+  padding: 13px;
   background-color: #111;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #333;
+}
+
+.submit-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #ffeaea;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.success-message {
+  background: #e6f9ee;
+  color: #1a7a3c;
+  border: 1px solid #b7dfca;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
 }
 
 .footer-text {
   text-align: center;
   margin-top: 20px;
-  font-size: 14px;
+  font-size: 13px;
   color: #888;
 }
 
@@ -82,4 +121,5 @@
   color: #000;
   cursor: pointer;
   text-decoration: underline;
+  font-weight: 500;
 }

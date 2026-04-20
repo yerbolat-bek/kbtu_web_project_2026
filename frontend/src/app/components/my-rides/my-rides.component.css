@@ -1,0 +1,236 @@
+.main-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #fcfcfc;
+  min-height: 100vh;
+  color: #1a1a1a;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 40px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  color: #000;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #000;
+  background-color: #f5f5f5;
+}
+
+.nav-links a.active {
+  color: #000;
+  background-color: #fff8e6;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background: #f5f5f5;
+  color: #333;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background: #eeeeee;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.content-header {
+  margin-bottom: 32px;
+}
+
+.content-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.content-header p {
+  color: #888;
+  font-size: 15px;
+  margin: 0;
+}
+
+.rides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.ride-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ride-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.card-top h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-open {
+  background: #eefdf3;
+  color: #27ae60;
+}
+
+.status-full {
+  background: #fff0f0;
+  color: #eb5757;
+}
+
+.date {
+  font-size: 13px;
+  color: #aaa;
+  margin: 0 0 20px 0;
+}
+
+.card-stats {
+  display: flex;
+  gap: 30px;
+  padding: 16px 0;
+  border-top: 1px solid #f9f9f9;
+  margin-bottom: 20px;
+}
+
+.stat label {
+  display: block;
+  font-size: 10px;
+  color: #bbb;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.stat .value {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.delete-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #fff0f0;
+  color: #eb5757;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #eb5757;
+  color: #ffffff;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+  font-weight: 500;
+}
+
+.error-box {
+  background: #fff0f0;
+  color: #eb5757;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.empty-box {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #f0f0f0;
+}
+
+.empty-box .icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-box h3 {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.retry-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
