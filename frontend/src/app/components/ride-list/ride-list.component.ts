@@ -74,7 +74,6 @@ export class RideListComponent implements OnInit {
 
   this.rideService.createRide(this.newRide).subscribe({
     next: (created: any) => {
-      // ✅ Подставляем объекты локаций, чтобы point_a?.name работало в шаблоне
       const enriched = {
         ...created,
         point_a: { id: created.point_a, name: this.newRide.point_a },

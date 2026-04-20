@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -13,14 +14,16 @@ import { Router } from '@angular/router';
 })
 export class AuthComponent {
   isLoginMode = true;
-
   authData = { username: '', email: '', password: '' };
-
   errorMessage: string = '';
   successMessage: string = '';
   isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   toggleMode(mode: boolean) {
     this.isLoginMode = mode;
@@ -39,18 +42,20 @@ export class AuthComponent {
         password: this.authData.password
       }).subscribe({
         next: (res: any) => {
-          localStorage.setItem('token', res.token);
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', res.token);
+          }
           this.isLoading = false;
           this.router.navigate(['/rides']);
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = 'Неверный логин или пароль. Попробуйте снова.';
+          this.errorMessage = err.error?.error || 'Неверный логин или пароль.';
         }
       });
 
     } else {
-      if (!this.authData.email.includes('@')) {
+      if (!this.authData.email || !this.authData.email.includes('@')) {
         this.errorMessage = 'Введите корректный Email адрес';
         this.isLoading = false;
         return;
@@ -58,14 +63,17 @@ export class AuthComponent {
 
       this.authService.register(this.authData).subscribe({
         next: (res: any) => {
-          localStorage.setItem('token', res.token);
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', res.token);
+          }
           this.isLoading = false;
           this.successMessage = 'Аккаунт успешно создан!';
-          setTimeout(() => this.router.navigate(['/rides']), 1000);
+          setTimeout(() => this.router.navigate(['/rides']), 1500);
         },
         error: (err: any) => {
           this.isLoading = false;
-          this.errorMessage = err.error?.error || 'Ошибка регистрации. Попробуйте снова.';
+          this.errorMessage = err.error?.error || 'Ошибка регистрации. Попробуйте другой ник.';
+          console.error('Registration error:', err);
         }
       });
     }

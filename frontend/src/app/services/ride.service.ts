@@ -19,10 +19,6 @@ export class RideService {
   }
 
   getRides(): Observable<any[]> {
-    if (isPlatformBrowser(this.platformId) && !localStorage.getItem('token')) {
-      this.goToLogin();
-      return new Observable<any[]>(subscriber => subscriber.next([]));
-    }
     return this.http.get<any[]>(`${this.apiUrl}/rides/`);
   }
 

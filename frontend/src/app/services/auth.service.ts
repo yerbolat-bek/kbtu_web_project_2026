@@ -26,6 +26,13 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/logout/`, {});
   }
 
+  clearAuthData(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username'); 
+    }
+  }
+
   isLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId)) {
       return !!localStorage.getItem('token');
