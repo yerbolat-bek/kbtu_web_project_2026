@@ -3,7 +3,9 @@
     <div class="logo">Жол · Ride</div>
     <nav class="nav-links">
       <a class="active">Все поездки</a>
-      <a [routerLink]="['/my-rides']" routerLinkActive="active">Мои поездки</a>
+      
+      <a [routerLink]="['/my-rides']">Мои поездки</a>
+      
       <button class="create-btn" (click)="toggleCreateForm()">
         {{ showCreateForm ? '✕ Закрыть' : '+ Создать поездку' }}
       </button>

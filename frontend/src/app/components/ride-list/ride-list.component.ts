@@ -64,34 +64,39 @@ export class RideListComponent implements OnInit {
   }
 
   createRide() {
-  if (!this.newRide.point_a || !this.newRide.point_b || !this.newRide.departure_time || !this.newRide.total_price) {
-    this.errorMessage = 'Заполните все поля формы.';
-    return;
-  }
-
-  this.isSubmitting = true;
-  this.errorMessage = '';
-
-  this.rideService.createRide(this.newRide).subscribe({
-    next: (created: any) => {
-      const enriched = {
-        ...created,
-        point_a: { id: created.point_a, name: this.newRide.point_a },
-        point_b: { id: created.point_b, name: this.newRide.point_b },
-      };
-      this.rides.unshift(enriched);
-      this.successMessage = 'Поездка успешно создана!';
-      this.isSubmitting = false;
-      this.showCreateForm = false;
-      this.newRide = { point_a: '', point_b: '', departure_time: '', total_price: '', max_seats: 3 };
-    },
-    error: (err: any) => {
-      console.error('Ошибка создания поездки:', err);
-      this.errorMessage = err.error?.detail || 'Не удалось создать поездку. Проверьте данные.';
-      this.isSubmitting = false;
+    if (!this.newRide.point_a || !this.newRide.point_b || !this.newRide.departure_time || !this.newRide.total_price) {
+      this.errorMessage = 'Заполните все поля формы.';
+      return;
     }
-  });
- }
+
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
+    this.rideService.createRide(this.newRide).subscribe({
+      next: (created: any) => {
+        const locA = this.locations.find(l => l.id == this.newRide.point_a);
+        const locB = this.locations.find(l => l.id == this.newRide.point_b);
+
+        const enriched = {
+          ...created,
+          point_a: { id: created.point_a, name: locA ? locA.name : 'Пункт А' },
+          point_b: { id: created.point_b, name: locB ? locB.name : 'Пункт Б' },
+        };
+
+        this.rides.unshift(enriched); // Добавляем в начало списка
+        this.successMessage = 'Поездка успешно создана!';
+        this.isSubmitting = false;
+        this.showCreateForm = false;
+        
+        // Сброс формы
+        this.newRide = { point_a: '', point_b: '', departure_time: '', total_price: '', max_seats: 3 };
+      },
+      error: (err: any) => {
+        this.errorMessage = err.error?.detail || 'Ошибка данных. Проверьте время и стоимость.';
+        this.isSubmitting = false;
+      }
+    });
+  }
 
   goToLogin() {
     this.router.navigate(['/login']);
