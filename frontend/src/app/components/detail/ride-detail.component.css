@@ -1,0 +1,95 @@
+.main-container { min-height: 100vh; background: #f8f8f6; font-family: 'Inter', sans-serif; }
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px; background: white; border-bottom: 1px solid #eee;
+}
+.logo { font-size: 18px; font-weight: 700; }
+.nav-links a { cursor: pointer; color: #333; text-decoration: none; font-size: 14px; }
+.nav-links a:hover { text-decoration: underline; }
+
+.content { max-width: 680px; margin: 40px auto; padding: 0 24px; }
+
+.loading { text-align: center; padding: 60px; color: #888; font-size: 16px; }
+
+.detail-card {
+  background: white; border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.detail-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 24px;
+}
+.detail-header h1 { font-size: 22px; font-weight: 700; margin: 0; }
+
+.badge {
+  padding: 4px 12px; border-radius: 20px; font-size: 11px;
+  font-weight: 700; letter-spacing: 0.5px; white-space: nowrap;
+}
+.status-open { background: #e8f5e9; color: #2e7d32; }
+.status-full { background: #fce4ec; color: #c62828; }
+
+.detail-info { margin: 24px 0; border-top: 1px solid #f0f0f0; }
+
+.info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid #f5f5f5;
+}
+.info-label { color: #888; font-size: 13px; }
+.info-value { font-weight: 600; font-size: 14px; color: #111; }
+.creator-highlight { color: #1a56db; }
+
+.passengers-section {
+  margin: 24px 0; padding: 20px; background: #f8f9ff;
+  border-radius: 12px;
+}
+.passengers-section h3 { margin: 0 0 16px; font-size: 15px; }
+.no-passengers { color: #888; font-size: 13px; }
+.passenger-list { list-style: none; padding: 0; margin: 0; }
+.passenger-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #eef0ff;
+  font-size: 14px;
+}
+.passenger-list li:last-child { border-bottom: none; }
+.passenger-name { font-weight: 500; }
+.passenger-date { color: #888; font-size: 12px; }
+
+.detail-actions {
+  display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
+}
+
+.join-btn {
+  background: #111; color: white; border: none; padding: 12px 24px;
+  border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+  flex: 1;
+}
+.join-btn:hover:not(:disabled) { background: #333; }
+.join-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+.delete-btn {
+  background: #fce4ec; color: #c62828; border: none; padding: 12px 20px;
+  border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.delete-btn:hover { background: #f8bbd0; }
+
+.back-btn {
+  background: white; color: #333; border: 1px solid #ddd; padding: 12px 20px;
+  border-radius: 8px; font-size: 14px; cursor: pointer;
+}
+.back-btn:hover { background: #f5f5f5; }
+
+.joined-badge {
+  padding: 12px 20px; background: #e8f5e9; color: #2e7d32;
+  border-radius: 8px; font-weight: 600; font-size: 14px;
+}
+
+.success-box {
+  background: #e8f5e9; color: #2e7d32; padding: 12px 16px;
+  border-radius: 8px; margin-bottom: 16px; font-size: 14px;
+}
+.error-box {
+  background: #fce4ec; color: #c62828; padding: 12px 16px;
+  border-radius: 8px; margin-bottom: 16px; font-size: 14px;
+}

@@ -1,0 +1,102 @@
+<div class="main-container">
+  <header class="header">
+    <div class="logo">Жол · Ride</div>
+    <nav class="nav-links">
+      <a (click)="goBack()" style="cursor:pointer;">← Все поездки</a>
+    </nav>
+  </header>
+
+  <main class="content">
+
+    @if (isLoading) {
+      <div class="loading">Загрузка поездки...</div>
+
+    } @else if (!ride) {
+      <div class="error-box">{{ errorMessage }}</div>
+      <button class="back-btn" (click)="goBack()">← Вернуться</button>
+
+    } @else {
+      <div class="detail-card">
+
+        <div class="detail-header">
+          <h1>{{ ride.point_a?.name }} → {{ ride.point_b?.name }}</h1>
+          <span class="badge"
+            [class.status-open]="ride.status === 'open'"
+            [class.status-full]="ride.status === 'full'">
+            {{ ride.status === 'open' ? 'ОТКРЫТО' : 'ЗАПОЛНЕНО' }}
+          </span>
+        </div>
+
+        @if (successMessage) {
+          <div class="success-box">{{ successMessage }}</div>
+        }
+        @if (errorMessage) {
+          <div class="error-box">{{ errorMessage }}</div>
+        }
+
+        <div class="detail-info">
+          <div class="info-row">
+            <span class="info-label">📍 Откуда</span>
+            <span class="info-value">{{ ride.point_a?.name }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">🏁 Куда</span>
+            <span class="info-value">{{ ride.point_b?.name }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">🕐 Время отправления</span>
+            <span class="info-value">{{ ride.departure_time | date:'dd.MM.yyyy, HH:mm' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">💰 Стоимость</span>
+            <span class="info-value">{{ ride.total_price }} ₸</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">💺 Заполненность</span>
+            <span class="info-value">{{ ride.passenger_count }} / {{ ride.max_seats }} мест</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">👤 Организатор</span>
+            <span class="info-value creator-highlight">{{ ride.creator?.username }}</span>
+          </div>
+        </div>
+
+        @if (ride.is_creator) {
+          <div class="passengers-section">
+            <h3>Пассажиры ({{ ride.passengers?.length || 0 }})</h3>
+            @if (ride.passengers?.length === 0) {
+              <p class="no-passengers">Пока никто не присоединился.</p>
+            } @else {
+              <ul class="passenger-list">
+                @for (p of ride.passengers; track p.id) {
+                  <li>
+                    <span class="passenger-name">👤 {{ p.username }}</span>
+                    <span class="passenger-date">{{ p.joined_at | date:'dd.MM, HH:mm' }}</span>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        }
+
+        <!-- Действия -->
+        <div class="detail-actions">
+          @if (ride.is_creator) {
+            <button class="delete-btn" (click)="deleteRide()">🗑 Удалить поездку</button>
+          } @else if (ride.is_joined) {
+            <div class="joined-badge">✅ Вы уже в этой поездке</div>
+          } @else {
+            <button class="join-btn"
+              (click)="joinRide()"
+              [disabled]="isJoining || ride.status === 'full'">
+              {{ isJoining ? 'Присоединение...' : ride.status === 'full' ? 'Мест нет' : '🚗 Присоединиться' }}
+            </button>
+          }
+          <button class="back-btn" (click)="goBack()">← Назад</button>
+        </div>
+
+      </div>
+    }
+
+  </main>
+</div>

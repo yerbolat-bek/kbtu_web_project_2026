@@ -3,9 +3,7 @@
     <div class="logo">Жол · Ride</div>
     <nav class="nav-links">
       <a class="active">Все поездки</a>
-      
-      <a [routerLink]="['/my-rides']">Мои поездки</a>
-      
+      <a [routerLink]="['/my-rides']" routerLinkActive="active">Мои поездки</a>
       <button class="create-btn" (click)="toggleCreateForm()">
         {{ showCreateForm ? '✕ Закрыть' : '+ Создать поездку' }}
       </button>
@@ -33,22 +31,36 @@
 
         <div class="form-group">
           <label>Откуда</label>
-          <select [(ngModel)]="newRide.point_a" name="point_a">
-            <option value="">-- Выберите место --</option>
+          <input
+            type="text"
+            [(ngModel)]="newRide.point_a"
+            name="point_a"
+            list="locations-a"
+            placeholder="Введите адрес отправления..."
+            autocomplete="off"
+          />
+          <datalist id="locations-a">
             @for (loc of locations; track loc.id) {
-              <option [value]="loc.id">{{ loc.name }}</option>
+              <option [value]="loc.name"></option>
             }
-          </select>
+          </datalist>
         </div>
 
         <div class="form-group">
           <label>Куда</label>
-          <select [(ngModel)]="newRide.point_b" name="point_b">
-            <option value="">-- Выберите место --</option>
+          <input
+            type="text"
+            [(ngModel)]="newRide.point_b"
+            name="point_b"
+            list="locations-b"
+            placeholder="Введите адрес назначения..."
+            autocomplete="off"
+          />
+          <datalist id="locations-b">
             @for (loc of locations; track loc.id) {
-              <option [value]="loc.id">{{ loc.name }}</option>
+              <option [value]="loc.name"></option>
             }
-          </select>
+          </datalist>
         </div>
 
         <div class="form-group">
@@ -63,7 +75,13 @@
 
         <div class="form-group">
           <label>Количество мест</label>
-          <input type="number" [(ngModel)]="newRide.max_seats" name="max_seats" min="1" max="10" />
+          <select [(ngModel)]="newRide.max_seats" name="max_seats">
+            @for (seat of seatOptions; track seat) {
+              <option [value]="seat">
+                {{ seat }} {{ seat === 1 ? 'место' : seat < 5 ? 'места' : 'мест' }}
+              </option>
+            }
+          </select>
         </div>
 
         <div class="form-actions">
@@ -88,7 +106,8 @@
               </span>
             </div>
 
-            <p class="date">{{ ride.departure_time | date:'dd.MM.yyyy, HH:mm' }}</p>
+            <p class="creator-name">👤 {{ ride.creator?.username }}</p>
+            <p class="date">🕐 {{ ride.departure_time | date:'dd.MM.yyyy, HH:mm' }}</p>
 
             <div class="card-stats">
               <div class="stat">
@@ -97,10 +116,24 @@
               </div>
               <div class="stat">
                 <label>МЕСТ</label>
-                <div class="value">{{ ride.max_seats }}</div>
+                <div class="value">{{ ride.passenger_count }}/{{ ride.max_seats }}</div>
               </div>
             </div>
-            <button class="join-btn" (click)="joinRide(ride.id)">Присоединиться</button>
+
+            <div class="card-actions">
+              <button class="detail-btn" (click)="viewDetail(ride.id)">Подробнее</button>
+
+              @if (ride.creator?.username !== currentUsername) {
+                <button
+                  class="join-btn"
+                  (click)="joinRide(ride.id)"
+                  [disabled]="ride.status === 'full' || joiningRideId === ride.id">
+                  {{ joiningRideId === ride.id ? '...' : ride.status === 'full' ? 'Заполнено' : 'Присоединиться' }}
+                </button>
+              } @else {
+                <span class="own-ride-badge">Ваша поездка</span>
+              }
+            </div>
           </div>
         }
       </div>
@@ -108,8 +141,8 @@
       <div class="empty-box">
         <div class="icon">🚗</div>
         <h3>Поездок пока не найдено</h3>
-        <p>Попробуйте войти заново или создайте свою первую поездку!</p>
-        <button class="retry-btn" (click)="goToLogin()">Вернуться к авторизации</button>
+        <p>Создайте первую поездку или обновите страницу!</p>
+        <button class="retry-btn" (click)="loadRides()">Обновить</button>
       </div>
     }
   </main>

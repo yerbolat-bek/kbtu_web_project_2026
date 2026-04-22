@@ -44,6 +44,7 @@ export class AuthComponent {
         next: (res: any) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('token', res.token);
+            localStorage.setItem('username', this.authData.username);
           }
           this.isLoading = false;
           this.router.navigate(['/rides']);
@@ -65,6 +66,7 @@ export class AuthComponent {
         next: (res: any) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('token', res.token);
+            localStorage.setItem('username', res.username);
           }
           this.isLoading = false;
           this.successMessage = 'Аккаунт успешно создан!';
