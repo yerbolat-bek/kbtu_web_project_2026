@@ -8,7 +8,7 @@ import { RideDetailComponent } from './components/detail/ride-detail.component';
 
 const authGuard = () => {
   const platformId = inject(PLATFORM_ID);
-  if (!isPlatformBrowser(platformId)) return true; // SSR: пропускаем
+  if (!isPlatformBrowser(platformId)) return true;
   const token = localStorage.getItem('token');
   if (token) return true;
   return '/login';

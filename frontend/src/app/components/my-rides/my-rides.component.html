@@ -35,7 +35,7 @@
                 {{ ride.status === 'open' ? 'ОТКРЫТО' : 'ЗАПОЛНЕНО' }}
               </span>
             </div>
-            <p class="date">{{ ride.departure_time | date:'dd.MM.yyyy, HH:mm' }}</p>
+            <p class="date">{{ ride.departure_time | date:'dd.MM.yyyy, HH:mm':'UTC' }}</p>
 
             <div class="card-stats">
               <div class="stat">
