@@ -12,12 +12,10 @@ import { RideService } from '../../services/ride.service';
   styleUrl: './my-rides.component.css'
 })
 export class MyRidesComponent implements OnInit {
-  createdRides: any[] = [];
-  joinedRides: any[] = [];
+  myRides: any[] = [];
   errorMessage: string = '';
   isLoading: boolean = true;
   currentUsername: string = '';
-myRides: any;
 
   constructor(
     private rideService: RideService,
@@ -39,22 +37,32 @@ myRides: any;
 
     this.rideService.getMyRides().subscribe({
       next: (data: any) => {
-        if (data && typeof data === 'object' && !Array.isArray(data)) {
-          this.createdRides = data.created || [];
-          this.joinedRides = data.joined || [];
+        if (data && !Array.isArray(data) && data.created) {
+          this.myRides = [...(data.created || []), ...(data.joined || [])];
         } else if (Array.isArray(data)) {
-          this.createdRides = data.filter((r: any) => r.creator?.username === this.currentUsername);
-          this.joinedRides = [];
+          this.myRides = data.filter(
+            (r: any) => r.creator?.username === this.currentUsername
+          );
         } else {
-          this.createdRides = [];
-          this.joinedRides = [];
+          this.myRides = [];
         }
         this.isLoading = false;
       },
       error: (err: any) => {
-        console.error('Ошибка /rides/my/:', err);
+        console.error('Ошибка:', err);
         if (err.status === 404) {
-          this.fallbackToAllRides();
+          this.rideService.getRides().subscribe({
+            next: (all: any[]) => {
+              this.myRides = all.filter(
+                (r: any) => r.creator?.username === this.currentUsername
+              );
+              this.isLoading = false;
+            },
+            error: () => {
+              this.errorMessage = 'Не удалось загрузить поездки.';
+              this.isLoading = false;
+            }
+          });
         } else if (err.status === 401) {
           this.router.navigate(['/login']);
         } else {
@@ -65,28 +73,13 @@ myRides: any;
     });
   }
 
-  private fallbackToAllRides() {
-    this.rideService.getRides().subscribe({
-      next: (data: any[]) => {
-        this.createdRides = data.filter((r: any) => r.creator?.username === this.currentUsername);
-        this.joinedRides = [];
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Не удалось загрузить поездки.';
-        this.isLoading = false;
-      }
-    });
-  }
-
-  viewDetail(rideId: number) { this.router.navigate(['/rides', rideId]); }
   goToAllRides() { this.router.navigate(['/rides']); }
 
   deleteRide(rideId: number) {
     if (confirm('Удалить поездку?')) {
       this.rideService.deleteRide(rideId).subscribe({
-        next: () => { this.createdRides = this.createdRides.filter(r => r.id !== rideId); },
-        error: (err: any) => { this.errorMessage = err.error?.error || 'Не удалось удалить поездку.'; }
+        next: () => { this.myRides = this.myRides.filter(r => r.id !== rideId); },
+        error: () => { this.errorMessage = 'Не удалось удалить поездку.'; }
       });
     }
   }
